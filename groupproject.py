@@ -53,3 +53,87 @@ print(data.dtypes)
 print("\nMissing Values:")
 print(data.isnull().sum())
 
+#Get clsoing prices and trading volume
+close_prices = data ["Close"][stocks].copy()
+volume = data ["Volume"][stocks].copy()
+
+#Remove dates where a closing price is missing
+Close_prices = close_prices.dropna()
+
+#keep volume on the same dates
+volume = volume.loc[close_prices.index]
+
+print("\nRecords After Cleaning")
+print(len(close_prices))
+
+#Save the closing prices
+close_prices.to_csv("results/closing_prices.csv")
+
+#Work Item 3: Daily return and statistics
+print("\nWork Item 3: Statistics")
+
+#Calculate the daily percentage returns
+daily_returns = close_prices.pct_change(fill_method=None) * 100
+
+#Remove the first row
+daily_returns = daily_returns.dropna()
+
+print("\nDaily Percentage Returns:")
+print(daily_returns.head())
+
+#Cal six stats for closing prices
+price_stats = close_prices.agg([
+    "count",
+    "mean",
+    "median",
+    "min",
+    "max",
+    "Standard Deviation"
+])
+
+print("\nClosing Price Statistics:")
+print(price_stats.round(2))
+
+#Calculate the same stats for daily returns
+
+return_stats = daily_returns.agg([
+    "count",
+    "mean",
+    "median",
+    "min",
+    "max",
+    "Standard Deviation"
+])
+
+print("\nDaily Return Statistics:")
+print(return_stats.round(2))
+
+#Calculate correlation between our three stocks
+correlation = daily_returns.corr()
+
+print("\nStock Correlation:")
+print(correlation.round(2))
+
+#Explain each pair of stocks
+for i in range(len(stocks)):
+    for j in range(i + 1, len(stocks)):
+        stock1 = stocks[i]
+        stock2 = stocks[j]
+        number = correlation.loc[stock1, stock2]
+        print("\n", stock1, "and", stock2,)
+        print ("Correlation:", round(number, 2))
+
+        if number >= 0.7:
+            print("These stocks have a strong positive relationship.")
+
+        elif number >= 0.3:
+            print("These stocks have a moderate positive relationship.")
+
+        elif number <= -0.7:
+            print("These stocks have a strong negative relationship.")
+        else:
+            print("These stocks have a weak linear relationship.")
+
+#Save our results
+daily_returns.to_csv("results/daily_returns.csv")
+close_prices.to_csv("results/closing_prices.csv")
