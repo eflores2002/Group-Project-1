@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import yfinance as yf
+import matplotlib.pyplot as plt
 
 os.makedirs("results", exist_ok=True)
 
