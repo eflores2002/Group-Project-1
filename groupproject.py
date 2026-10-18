@@ -164,3 +164,19 @@ print(monthly_avg_return.round(2))
 # save
 monthly_avg_price.to_csv("results/monthly_avg_price.csv")
 monthly_avg_return.to_csv("results/monthly_avg_return.csv")
+
+#Work Item 6 - Visuaslizations (charts)
+indexed = close_prices.dropna(how="any")
+normalized = indexed / indexed.iloc[0] * 100
+normalized.plot(figsize=(10, 4.5), title="Stock Performance")
+plt.ylabel("Price Movement (USD)")
+plt.xlabel("Date")
+plt.tight_layout()
+plt.show()
+
+daily_returns.boxplot(figsize=(8, 4.5))
+plt.title("Spread of daily returns")
+plt.suptitle("")
+plt.ylabel("Daily return (%)")
+plt.tight_layout()
+plt.show()
