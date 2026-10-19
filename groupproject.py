@@ -167,9 +167,10 @@ monthly_avg_price.to_csv("results/monthly_avg_price.csv")
 monthly_avg_return.to_csv("results/monthly_avg_return.csv")
 
 #Work Item 6 - Visuaslizations (charts)
+
 indexed = close_prices.dropna(how="any")
 normalized = indexed / indexed.iloc[0] * 100
-normalized.plot(figsize=(10, 4.5), title="Stock Performance")
+normalized.plot(figsize=(10, 4.5), title="Stock Performance (rebased to 100")
 plt.ylabel("Price Movement (USD)")
 plt.xlabel("Date")
 plt.tight_layout()
