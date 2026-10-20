@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 import yfinance as yf
-import matplotlib.pyplot as plt
 
 os.makedirs("results", exist_ok=True)
 
@@ -166,74 +165,10 @@ print(monthly_avg_return.round(2))
 monthly_avg_price.to_csv("results/monthly_avg_price.csv")
 monthly_avg_return.to_csv("results/monthly_avg_return.csv")
 
-#Work Item 6 - Visuaslizations (charts)
+# Work Item 5 - find the biggest moves
+print("\nWork Item 5: Biggest Daily Moves")
 
-indexed = close_prices.dropna(how="any")
-normalized = indexed / indexed.iloc[0] * 100
-normalized.plot(figsize=(10, 4.5), title="Stock Performance (rebased to 100")
-plt.ylabel("Price Movement (USD)")
-plt.xlabel("Date")
-plt.tight_layout()
-plt.show()
-
-august_prices = close_prices.loc[
-    "2024-07-30":"2024-08-23"
-]
-
-# Start all three stocks at 100 again
-august_normalized = august_prices / august_prices.iloc[0] * 100
-
-august_normalized.plot(
-    kind="line",
-    figsize=(11, 6),
-    marker="o"
-)
-
-# Zoom in on specific stock movement (Amazon)
-plt.axvline(
-    pd.Timestamp("2024-08-02"),
-    color="gray",
-    linestyle="--",
-    label="Amazon earnings reaction"
-)
-
-plt.axvline(
-    pd.Timestamp("2024-08-13"),
-    color="black",
-    linestyle="--",
-    label="CEO announcement"
-)
-
-plt.title("Stock Movements During August 2024")
-plt.xlabel("Date")
-plt.ylabel("Normalized Stock Price (Starting at 100)")
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-plt.show()
-
-# Spread of each stocks daily returns
-
-daily_returns.boxplot(figsize=(8, 4.5))
-plt.title("Spread of daily returns")
-plt.suptitle("")
-plt.ylabel("Daily return (%)")
-plt.tight_layout()
-plt.show()
-
-plt.figure(figsize=(9, 6))
-
-plt.scatter(
-    daily_returns["SBUX"],
-    daily_returns["CMG"],
-    alpha=0.5
-)
-
-#Comparison of stock movement between 2 stocks)
-plt.title("Starbucks vs Chipotle Daily Returns")
-plt.xlabel("Starbucks Daily Return (%)")
-plt.ylabel("Chipotle Daily Return (%)")
-plt.grid(True)
-plt.tight_layout()
-
-plt.show()
+for s in stocks:
+    print("\n", s)
+    print("biggest up:", daily_returns[s].idxmax().date(), round(daily_returns[s].max(), 2), "%")
+    print("biggest down:", daily_returns[s].idxmin().date(), round(daily_returns[s].min(), 2), "%")
